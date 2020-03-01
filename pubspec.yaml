@@ -1,0 +1,18 @@
+name: flutter_deep_linking
+description: "🧭 Handle all your routing with proper deep links and handle them declaratively!"
+version: 0.0.1
+homepage: https://github.com/JonasWanke/flutter_deep_linking
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pedantic: ^1.8.0
+  test: ^1.6.0
