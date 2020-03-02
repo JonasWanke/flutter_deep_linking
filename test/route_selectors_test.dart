@@ -23,7 +23,7 @@ void main() {
     ];
 
     group('empty', () {
-      setUp(() => selector = SchemeRouteSelector(''));
+      setUp(() => selector = SchemeRouteSelector(['']));
 
       for (final uri in urisWithoutScheme) {
         test(
@@ -45,7 +45,7 @@ void main() {
       }
     });
     group('https', () {
-      setUp(() => selector = SchemeRouteSelector('https'));
+      setUp(() => selector = SchemeRouteSelector(['https']));
 
       for (final uri in httpsUris) {
         test(

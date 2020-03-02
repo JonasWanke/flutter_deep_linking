@@ -20,7 +20,12 @@ class Route {
     String scheme, {
     RouteBuilder builder,
     List<Route> routes = const [],
-  }) : this._(SchemeRouteSelector(scheme), builder, routes);
+  }) : this._(SchemeRouteSelector([scheme]), builder, routes);
+  Route.schemes(
+    List<String> schemes, {
+    RouteBuilder builder,
+    List<Route> routes = const [],
+  }) : this._(SchemeRouteSelector(schemes), builder, routes);
   Route.host(
     String host, {
     RouteBuilder builder,

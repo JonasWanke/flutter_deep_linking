@@ -51,15 +51,15 @@ class RouteSelectorEvaluation {
 }
 
 class SchemeRouteSelector extends RouteSelector {
-  SchemeRouteSelector(String scheme)
-      : assert(scheme != null),
-        scheme = scheme.toLowerCase();
+  SchemeRouteSelector(List<String> schemes)
+      : assert(schemes != null),
+        schemes = schemes.map((s) => s.toLowerCase()).toList();
 
-  final String scheme;
+  final List<String> schemes;
 
   @override
   RouteSelectorEvaluation evaluate(PartialUri uri) {
-    if (uri.scheme != scheme) {
+    if (!schemes.contains(uri.scheme)) {
       return RouteSelectorEvaluation.noMatch();
     }
 
@@ -69,7 +69,7 @@ class SchemeRouteSelector extends RouteSelector {
   }
 
   @override
-  String toString() => 'Scheme: $scheme';
+  String toString() => 'Schemes: ${schemes.join(',')}';
 }
 
 class HostRouteSelector extends RouteSelector {
