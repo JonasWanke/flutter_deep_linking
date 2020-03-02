@@ -73,13 +73,15 @@ class SchemeRouteSelector extends RouteSelector {
 }
 
 class HostRouteSelector extends RouteSelector {
-  const HostRouteSelector(this.host) : assert(host != null);
+  HostRouteSelector(this.hosts)
+      : assert(hosts != null),
+        assert(hosts.every((h) => h != null));
 
-  final String host;
+  final List<String> hosts;
 
   @override
   RouteSelectorEvaluation evaluate(PartialUri uri) {
-    if (uri.host != host) {
+    if (!hosts.contains(uri.host)) {
       return RouteSelectorEvaluation.noMatch();
     }
 
@@ -89,7 +91,7 @@ class HostRouteSelector extends RouteSelector {
   }
 
   @override
-  String toString() => 'Host: $host';
+  String toString() => 'Host: ${hosts.join(',')}';
 }
 
 class PathRouteSelector extends RouteSelector {

@@ -26,11 +26,17 @@ class Route {
     RouteBuilder builder,
     List<Route> routes = const [],
   }) : this._(SchemeRouteSelector(schemes), builder, routes);
+
   Route.host(
     String host, {
     RouteBuilder builder,
     List<Route> routes = const [],
-  }) : this._(HostRouteSelector(host), builder, routes);
+  }) : this._(HostRouteSelector([host]), builder, routes);
+  Route.hosts(
+    List<String> hosts, {
+    RouteBuilder builder,
+    List<Route> routes = const [],
+  }) : this._(HostRouteSelector(hosts), builder, routes);
 
   Route.path(
     String path, {
