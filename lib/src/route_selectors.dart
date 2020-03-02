@@ -84,14 +84,23 @@ class PathRouteSelector extends RouteSelector {
       return RouteSelectorEvaluation.noMatch();
     }
 
+    final params = <String, String>{};
     for (var i = 0; i < pathSegments.length; i++) {
-      if (pathSegments[0] != uri.pathSegments[i]) {
+      final segment = pathSegments[i];
+      final toMatch = uri.pathSegments[i];
+
+      if (segment.startsWith('{') && segment.endsWith('}')) {
+        params[segment.substring(1, segment.length - 1)] = toMatch;
+      } else if (segment == toMatch) {
+        continue;
+      } else {
         return RouteSelectorEvaluation.noMatch();
       }
     }
 
     return RouteSelectorEvaluation.match(
       remainingUri: uri.copyWith(removeFirstPathSegments: pathSegments.length),
+      parameters: params,
     );
   }
 

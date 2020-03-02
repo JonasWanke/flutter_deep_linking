@@ -4,6 +4,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Match', () {
+    RouteSelector selector;
+
     group('scheme', () {
       final urisWithoutScheme = [
         PartialUri.parse('//github.com'),
@@ -22,11 +24,13 @@ void main() {
       ];
 
       group('empty', () {
+        setUp(() => selector = SchemeRouteSelector(''));
+
         for (final uri in urisWithoutScheme) {
           test(
             uri.toString(),
             () => expect(
-              SchemeRouteSelector('').evaluate(uri),
+              selector.evaluate(uri),
               equals(RouteSelectorEvaluation.match(remainingUri: uri)),
             ),
           );
@@ -35,18 +39,20 @@ void main() {
           test(
             uri.toString(),
             () => expect(
-              SchemeRouteSelector('').evaluate(uri),
+              selector.evaluate(uri),
               equals(RouteSelectorEvaluation.noMatch()),
             ),
           );
         }
       });
       group('https', () {
+        setUp(() => selector = SchemeRouteSelector('https'));
+
         for (final uri in httpsUris) {
           test(
             uri.toString(),
             () => expect(
-              SchemeRouteSelector('https').evaluate(uri),
+              selector.evaluate(uri),
               equals(RouteSelectorEvaluation.match(
                 remainingUri: urisWithoutScheme[httpsUris.indexOf(uri)],
               )),
@@ -57,7 +63,7 @@ void main() {
           test(
             uri.toString(),
             () => expect(
-              SchemeRouteSelector('https').evaluate(uri),
+              selector.evaluate(uri),
               equals(RouteSelectorEvaluation.noMatch()),
             ),
           );
@@ -68,10 +74,12 @@ void main() {
     group('path', () {
       group('single segment', () {
         group('plain', () {
+          setUp(() => selector = PathRouteSelector('JonasWanke'));
+
           final singleSegment = PartialUri.parse('//github.com/JonasWanke');
           test(singleSegment.toString(), () {
             expect(
-              PathRouteSelector('JonasWanke').evaluate(singleSegment),
+              selector.evaluate(singleSegment),
               equals(RouteSelectorEvaluation.match(
                   remainingUri: PartialUri.parse('//github.com'))),
             );
@@ -80,7 +88,7 @@ void main() {
           final emptyPath = PartialUri.parse('//github.com/');
           test(emptyPath.toString(), () {
             expect(
-              PathRouteSelector('JonasWanke').evaluate(emptyPath),
+              selector.evaluate(emptyPath),
               equals(RouteSelectorEvaluation.noMatch()),
             );
           });
@@ -88,7 +96,7 @@ void main() {
           final wrongPath = PartialUri.parse('//github.com/actions');
           test(wrongPath.toString(), () {
             expect(
-              PathRouteSelector('JonasWanke').evaluate(wrongPath),
+              selector.evaluate(wrongPath),
               equals(RouteSelectorEvaluation.noMatch()),
             );
           });
@@ -97,13 +105,89 @@ void main() {
               PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking/');
           test(longerPath.toString(), () {
             expect(
-              PathRouteSelector('JonasWanke').evaluate(longerPath),
+              selector.evaluate(longerPath),
               equals(RouteSelectorEvaluation.match(
                 remainingUri:
                     PartialUri.parse('//github.com/flutter_deep_linking/'),
               )),
             );
           });
+        });
+
+        group('parameter', () {
+          final singleSegment1 = PartialUri.parse('//github.com/JonasWanke');
+          test(singleSegment1.toString(), () {
+            expect(
+              PathRouteSelector('{userName}').evaluate(singleSegment1),
+              equals(RouteSelectorEvaluation.match(
+                remainingUri: PartialUri.parse('//github.com'),
+                parameters: {'userName': 'JonasWanke'},
+              )),
+            );
+          });
+
+          final singleSegment2 = PartialUri.parse('//github.com/actions');
+          test(singleSegment2.toString(), () {
+            expect(
+              PathRouteSelector('{userName}').evaluate(singleSegment2),
+              equals(RouteSelectorEvaluation.match(
+                remainingUri: PartialUri.parse('//github.com'),
+                parameters: {'userName': 'actions'},
+              )),
+            );
+          });
+
+          final emptyPath = PartialUri.parse('//github.com');
+          test(emptyPath.toString(), () {
+            expect(
+              PathRouteSelector('{userName}').evaluate(emptyPath),
+              equals(RouteSelectorEvaluation.noMatch()),
+            );
+          });
+
+          final longerPath =
+              PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking/');
+          test(longerPath.toString(), () {
+            expect(
+              PathRouteSelector('{userName}').evaluate(longerPath),
+              equals(RouteSelectorEvaluation.match(
+                remainingUri:
+                    PartialUri.parse('//github.com/flutter_deep_linking/'),
+                parameters: {'userName': 'JonasWanke'},
+              )),
+            );
+          });
+        });
+      });
+      group('multiple segments', () {
+        setUp(() =>
+            selector = PathRouteSelector('JonasWanke/flutter_deep_linking'));
+
+        final exactMatch =
+            PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking');
+        test(exactMatch.toString(), () {
+          expect(
+            selector.evaluate(exactMatch),
+            equals(RouteSelectorEvaluation.match(
+              remainingUri: PartialUri.parse('//github.com'),
+            )),
+          );
+        });
+
+        final wrongPath = PartialUri.parse('//github.com/JonasWanke/Unicorn');
+        test(wrongPath.toString(), () {
+          expect(
+            selector.evaluate(wrongPath),
+            equals(RouteSelectorEvaluation.noMatch()),
+          );
+        });
+
+        final shorterPath = PartialUri.parse('//github.com/JonasWanke');
+        test(shorterPath.toString(), () {
+          expect(
+            selector.evaluate(shorterPath),
+            equals(RouteSelectorEvaluation.noMatch()),
+          );
         });
       });
     });
