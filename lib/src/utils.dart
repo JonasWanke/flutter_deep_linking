@@ -1,17 +1,3 @@
-extension FancyUri on Uri {
-  Uri copyWith({bool removeScheme = false}) {
-    return Uri(
-      scheme: removeScheme ? null : scheme,
-      userInfo: userInfo,
-      host: host,
-      port: port,
-      path: path,
-      query: query,
-      fragment: fragment,
-    );
-  }
-}
-
 /// Combine the [Object.hashCode] values of an arbitrary number of objects from
 /// an [Iterable] into one value. This function will return the same value if
 /// given null as if given an empty list.

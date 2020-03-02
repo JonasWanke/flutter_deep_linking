@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
+import 'partial_uri.dart';
 import 'utils.dart';
 
 @immutable
 abstract class RouteSelector {
-  RouteSelectorEvaluation evaluate(Uri uri);
+  RouteSelectorEvaluation evaluate(PartialUri uri);
 
   @override
   String toString();
@@ -25,7 +26,7 @@ class RouteSelectorEvaluation {
         assert(parameters != null);
 
   final bool isMatch;
-  final Uri remainingUri;
+  final PartialUri remainingUri;
   final Map<String, String> parameters;
 
   @override
@@ -55,7 +56,7 @@ class SchemeRouteSelector extends RouteSelector {
   final String scheme;
 
   @override
-  RouteSelectorEvaluation evaluate(Uri uri) {
+  RouteSelectorEvaluation evaluate(PartialUri uri) {
     if (uri.scheme != scheme) {
       return RouteSelectorEvaluation.noMatch();
     }
@@ -67,4 +68,33 @@ class SchemeRouteSelector extends RouteSelector {
 
   @override
   String toString() => 'Scheme: $scheme';
+}
+
+class PathRouteSelector extends RouteSelector {
+  PathRouteSelector(String path)
+      : assert(path != null),
+        assert(path.isNotEmpty),
+        pathSegments = path.split('/');
+
+  final List<String> pathSegments;
+
+  @override
+  RouteSelectorEvaluation evaluate(PartialUri uri) {
+    if (pathSegments.length > uri.pathSegments.length) {
+      return RouteSelectorEvaluation.noMatch();
+    }
+
+    for (var i = 0; i < pathSegments.length; i++) {
+      if (pathSegments[0] != uri.pathSegments[i]) {
+        return RouteSelectorEvaluation.noMatch();
+      }
+    }
+
+    return RouteSelectorEvaluation.match(
+      remainingUri: uri.copyWith(removeFirstPathSegments: pathSegments.length),
+    );
+  }
+
+  @override
+  String toString() => 'Path: ${pathSegments.join('/')}';
 }
