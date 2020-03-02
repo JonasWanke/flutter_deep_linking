@@ -129,3 +129,14 @@ class PathRouteSelector extends RouteSelector {
   @override
   String toString() => 'Path: ${pathSegments.join('/')}';
 }
+
+class AnyRouteSelector extends RouteSelector {
+  const AnyRouteSelector();
+
+  @override
+  RouteSelectorEvaluation evaluate(PartialUri uri) =>
+      RouteSelectorEvaluation.match(remainingUri: uri);
+
+  @override
+  String toString() => 'Any';
+}

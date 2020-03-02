@@ -35,11 +35,12 @@ class PartialUri {
 
   PartialUri copyWith({
     bool removeScheme = false,
+    bool removeHost = false,
     int removeFirstPathSegments = 0,
   }) {
     return PartialUri(
       scheme: removeScheme ? '' : scheme,
-      host: host,
+      host: removeHost ? '' : host,
       pathSegments: pathSegments.skip(removeFirstPathSegments).toList(),
       queryParameters: queryParameters,
       fragment: fragment,

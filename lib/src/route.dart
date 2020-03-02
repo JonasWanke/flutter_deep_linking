@@ -33,6 +33,11 @@ abstract class Route {
     List<Route> routes,
   }) : this._(PathRouteSelector(path), builder, routes);
 
+  Route.any({
+    RouteBuilder builder,
+    List<Route> routes,
+  }) : this._(AnyRouteSelector(), builder, routes);
+
   final RouteSelector selector;
   final RouteBuilder builder;
   final List<Route> routes;
