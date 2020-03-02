@@ -38,6 +38,31 @@ class Route {
     List<Route> routes = const [],
   }) : this._(HostRouteSelector(hosts), builder, routes);
 
+  factory Route.webHost(
+    String host, {
+    RouteBuilder builder,
+    List<Route> routes = const [],
+  }) {
+    return Route.schemes(
+      ['http', 'https'],
+      routes: [
+        Route.host(host, builder: builder, routes: routes),
+      ],
+    );
+  }
+  factory Route.webHosts(
+    List<String> hosts, {
+    RouteBuilder builder,
+    List<Route> routes = const [],
+  }) {
+    return Route.schemes(
+      ['http', 'https'],
+      routes: [
+        Route.hosts(hosts, builder: builder, routes: routes),
+      ],
+    );
+  }
+
   Route.path(
     String path, {
     RouteBuilder builder,
