@@ -21,6 +21,11 @@ abstract class Route {
     RouteBuilder builder,
     List<Route> routes,
   }) : this._(SchemeRouteSelector(scheme), builder, routes);
+  Route.host(
+    String host, {
+    RouteBuilder builder,
+    List<Route> routes,
+  }) : this._(HostRouteSelector(host), builder, routes);
 
   Route.path(
     String path, {

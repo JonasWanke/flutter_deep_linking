@@ -6,6 +6,8 @@ import 'utils.dart';
 
 @immutable
 abstract class RouteSelector {
+  const RouteSelector();
+
   RouteSelectorEvaluation evaluate(PartialUri uri);
 
   @override
@@ -68,6 +70,26 @@ class SchemeRouteSelector extends RouteSelector {
 
   @override
   String toString() => 'Scheme: $scheme';
+}
+
+class HostRouteSelector extends RouteSelector {
+  const HostRouteSelector(this.host) : assert(host != null);
+
+  final String host;
+
+  @override
+  RouteSelectorEvaluation evaluate(PartialUri uri) {
+    if (uri.host != host) {
+      return RouteSelectorEvaluation.noMatch();
+    }
+
+    return RouteSelectorEvaluation.match(
+      remainingUri: uri.copyWith(removeHost: true),
+    );
+  }
+
+  @override
+  String toString() => 'Host: $host';
 }
 
 class PathRouteSelector extends RouteSelector {
