@@ -8,13 +8,17 @@ import 'utils.dart';
 abstract class Matcher {
   const Matcher();
 
-  const factory Matcher.scheme(Pattern scheme) = SchemeMatcher;
-  factory Matcher.webScheme() =>
-      Matcher.scheme('http') | Matcher.scheme('https');
+  factory Matcher.scheme(Pattern scheme, {bool isOptional = false}) =>
+      SchemeMatcher(scheme, isOptional: isOptional);
+  factory Matcher.webScheme({bool isOptional = false}) =>
+      Matcher.scheme('http', isOptional: isOptional) |
+      Matcher.scheme('https', isOptional: isOptional);
 
-  const factory Matcher.host(Pattern host) = HostMatcher;
-  factory Matcher.webHost(Pattern host) =>
-      Matcher.webScheme() & HostMatcher(host);
+  factory Matcher.host(Pattern host, {bool isOptional = false}) =>
+      HostMatcher(host, isOptional: isOptional);
+  factory Matcher.webHost(Pattern host, {bool isOptional = false}) =>
+      Matcher.webScheme(isOptional: isOptional) &
+      HostMatcher(host, isOptional: isOptional);
 
   factory Matcher.path(String path) = PathMatcher;
 
