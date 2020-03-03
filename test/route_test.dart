@@ -14,7 +14,7 @@ void main() {
           routes: [
             Route(
               matcher: Matcher.path('{repoName}'),
-              materialPageRouteBuilder: (result, _) =>
+              materialPageRouteBuilder: (_, result) =>
                   Text('Repository: ${result['repoName']}'),
             ),
           ],

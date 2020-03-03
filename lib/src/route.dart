@@ -7,7 +7,7 @@ import 'route_result.dart';
 
 typedef RouteBuilder = flutter.Route<dynamic> Function(RouteResult result);
 typedef MaterialPageRouteBuilder = Widget Function(
-    RouteResult result, BuildContext context);
+    BuildContext context, RouteResult result);
 
 @immutable
 class Route {
@@ -32,7 +32,7 @@ class Route {
             'At most one builder may be provided'),
         builder = builder ??
             ((result) => MaterialPageRoute(
-                builder: (context) => materialPageRouteBuilder(result, context),
+                builder: (context) => materialPageRouteBuilder(context, result),
                 settings: result.settings)),
         assert(routes != null);
 
