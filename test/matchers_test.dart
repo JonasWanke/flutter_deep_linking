@@ -1,9 +1,8 @@
-import 'package:flutter_deep_linking/src/partial_uri.dart';
-import 'package:flutter_deep_linking/src/route_selectors.dart';
-import 'package:test/test.dart';
+import 'package:flutter_deep_linking/flutter_deep_linking.dart';
+import 'package:test/test.dart' hide Matcher;
 
 void main() {
-  RouteSelector selector;
+  Matcher matcher;
 
   group('scheme', () {
     final urisWithoutScheme = [
@@ -23,14 +22,14 @@ void main() {
     ];
 
     group('empty', () {
-      setUp(() => selector = SchemeRouteSelector(['']));
+      setUp(() => matcher = SchemeMatcher(''));
 
       for (final uri in urisWithoutScheme) {
         test(
           uri.toString(),
           () => expect(
-            selector.evaluate(uri),
-            equals(RouteSelectorEvaluation.match(remainingUri: uri)),
+            matcher.evaluate(uri),
+            equals(MatcherEvaluation.match(remainingUri: uri)),
           ),
         );
       }
@@ -38,21 +37,21 @@ void main() {
         test(
           uri.toString(),
           () => expect(
-            selector.evaluate(uri),
-            equals(RouteSelectorEvaluation.noMatch()),
+            matcher.evaluate(uri),
+            equals(MatcherEvaluation.noMatcher()),
           ),
         );
       }
     });
     group('https', () {
-      setUp(() => selector = SchemeRouteSelector(['https']));
+      setUp(() => matcher = SchemeMatcher('https'));
 
       for (final uri in httpsUris) {
         test(
           uri.toString(),
           () => expect(
-            selector.evaluate(uri),
-            equals(RouteSelectorEvaluation.match(
+            matcher.evaluate(uri),
+            equals(MatcherEvaluation.match(
               remainingUri: urisWithoutScheme[httpsUris.indexOf(uri)],
             )),
           ),
@@ -62,8 +61,8 @@ void main() {
         test(
           uri.toString(),
           () => expect(
-            selector.evaluate(uri),
-            equals(RouteSelectorEvaluation.noMatch()),
+            matcher.evaluate(uri),
+            equals(MatcherEvaluation.noMatcher()),
           ),
         );
       }
@@ -73,13 +72,13 @@ void main() {
   group('path', () {
     group('single segment', () {
       group('plain', () {
-        setUp(() => selector = PathRouteSelector('JonasWanke'));
+        setUp(() => matcher = Matcher.path('JonasWanke'));
 
         final singleSegment = PartialUri.parse('//github.com/JonasWanke');
         test(singleSegment.toString(), () {
           expect(
-            selector.evaluate(singleSegment),
-            equals(RouteSelectorEvaluation.match(
+            matcher.evaluate(singleSegment),
+            equals(MatcherEvaluation.match(
                 remainingUri: PartialUri.parse('//github.com'))),
           );
         });
@@ -87,16 +86,16 @@ void main() {
         final emptyPath = PartialUri.parse('//github.com/');
         test(emptyPath.toString(), () {
           expect(
-            selector.evaluate(emptyPath),
-            equals(RouteSelectorEvaluation.noMatch()),
+            matcher.evaluate(emptyPath),
+            equals(MatcherEvaluation.noMatcher()),
           );
         });
 
         final wrongPath = PartialUri.parse('//github.com/actions');
         test(wrongPath.toString(), () {
           expect(
-            selector.evaluate(wrongPath),
-            equals(RouteSelectorEvaluation.noMatch()),
+            matcher.evaluate(wrongPath),
+            equals(MatcherEvaluation.noMatcher()),
           );
         });
 
@@ -104,8 +103,8 @@ void main() {
             PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking/');
         test(longerPath.toString(), () {
           expect(
-            selector.evaluate(longerPath),
-            equals(RouteSelectorEvaluation.match(
+            matcher.evaluate(longerPath),
+            equals(MatcherEvaluation.match(
               remainingUri:
                   PartialUri.parse('//github.com/flutter_deep_linking/'),
             )),
@@ -117,8 +116,8 @@ void main() {
         final singleSegment1 = PartialUri.parse('//github.com/JonasWanke');
         test(singleSegment1.toString(), () {
           expect(
-            PathRouteSelector('{userName}').evaluate(singleSegment1),
-            equals(RouteSelectorEvaluation.match(
+            PathMatcher('{userName}').evaluate(singleSegment1),
+            equals(MatcherEvaluation.match(
               remainingUri: PartialUri.parse('//github.com'),
               parameters: {'userName': 'JonasWanke'},
             )),
@@ -128,8 +127,8 @@ void main() {
         final singleSegment2 = PartialUri.parse('//github.com/actions');
         test(singleSegment2.toString(), () {
           expect(
-            PathRouteSelector('{userName}').evaluate(singleSegment2),
-            equals(RouteSelectorEvaluation.match(
+            PathMatcher('{userName}').evaluate(singleSegment2),
+            equals(MatcherEvaluation.match(
               remainingUri: PartialUri.parse('//github.com'),
               parameters: {'userName': 'actions'},
             )),
@@ -139,8 +138,8 @@ void main() {
         final emptyPath = PartialUri.parse('//github.com');
         test(emptyPath.toString(), () {
           expect(
-            PathRouteSelector('{userName}').evaluate(emptyPath),
-            equals(RouteSelectorEvaluation.noMatch()),
+            PathMatcher('{userName}').evaluate(emptyPath),
+            equals(MatcherEvaluation.noMatcher()),
           );
         });
 
@@ -148,8 +147,8 @@ void main() {
             PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking/');
         test(longerPath.toString(), () {
           expect(
-            PathRouteSelector('{userName}').evaluate(longerPath),
-            equals(RouteSelectorEvaluation.match(
+            PathMatcher('{userName}').evaluate(longerPath),
+            equals(MatcherEvaluation.match(
               remainingUri:
                   PartialUri.parse('//github.com/flutter_deep_linking/'),
               parameters: {'userName': 'JonasWanke'},
@@ -159,15 +158,14 @@ void main() {
       });
     });
     group('multiple segments', () {
-      setUp(() =>
-          selector = PathRouteSelector('JonasWanke/flutter_deep_linking'));
+      setUp(() => matcher = PathMatcher('JonasWanke/flutter_deep_linking'));
 
-      final exactMatch =
+      final exactMatcher =
           PartialUri.parse('//github.com/JonasWanke/flutter_deep_linking');
-      test(exactMatch.toString(), () {
+      test(exactMatcher.toString(), () {
         expect(
-          selector.evaluate(exactMatch),
-          equals(RouteSelectorEvaluation.match(
+          matcher.evaluate(exactMatcher),
+          equals(MatcherEvaluation.match(
             remainingUri: PartialUri.parse('//github.com'),
           )),
         );
@@ -176,16 +174,16 @@ void main() {
       final wrongPath = PartialUri.parse('//github.com/JonasWanke/Unicorn');
       test(wrongPath.toString(), () {
         expect(
-          selector.evaluate(wrongPath),
-          equals(RouteSelectorEvaluation.noMatch()),
+          matcher.evaluate(wrongPath),
+          equals(MatcherEvaluation.noMatcher()),
         );
       });
 
       final shorterPath = PartialUri.parse('//github.com/JonasWanke');
       test(shorterPath.toString(), () {
         expect(
-          selector.evaluate(shorterPath),
-          equals(RouteSelectorEvaluation.noMatch()),
+          matcher.evaluate(shorterPath),
+          equals(MatcherEvaluation.noMatcher()),
         );
       });
     });

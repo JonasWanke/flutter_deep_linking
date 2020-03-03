@@ -1,67 +1,69 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' hide Route;
+import 'package:flutter/widgets.dart' as flutter show Route;
 
+import 'matchers.dart';
 import 'partial_uri.dart';
 import 'route.dart';
-import 'route_selectors.dart';
 import 'utils.dart';
 
 @immutable
 class RouteResult {
-  const RouteResult.noMatch(this.uri)
-      : assert(uri != null),
+  const RouteResult.noMatch(this.settings)
+      : assert(settings != null),
         isMatch = false,
         remainingUri = null,
         parameters = const {},
         builder = null;
 
   const RouteResult.match(
-    this.uri, {
+    this.settings, {
     @required this.remainingUri,
     this.parameters = const {},
     @required this.builder,
-  })  : assert(uri != null),
+  })  : assert(settings != null),
         isMatch = true,
         assert(remainingUri != null),
         assert(parameters != null),
         assert(builder != null);
 
-  RouteResult.root(this.uri)
-      : assert(uri != null),
+  RouteResult.root(this.settings)
+      : assert(settings != null),
+        assert(uri != null),
         isMatch = true,
-        remainingUri = PartialUri.fromUri(uri),
+        remainingUri = PartialUri.parse(settings.name),
         parameters = {},
         builder = null;
 
-  final Uri uri;
+  final RouteSettings settings;
+  Uri get uri => Uri.parse(settings.name);
   final bool isMatch;
   final PartialUri remainingUri;
   final Map<String, String> parameters;
   final RouteBuilder builder;
 
   RouteResult withNestedMatch(
-    RouteSelectorEvaluation evaluation,
+    MatcherEvaluation evaluation,
     RouteBuilder builder,
   ) {
     assert(evaluation != null);
     assert(builder != null);
 
     return RouteResult.match(
-      uri,
+      settings,
       builder: builder,
       remainingUri: evaluation.remainingUri,
       parameters: {...parameters, ...evaluation.parameters},
     );
   }
 
-  RouteResult withNoNestedMatch() => RouteResult.noMatch(uri);
+  RouteResult withNoNestedMatch() => RouteResult.noMatch(settings);
 
   String operator [](String key) => parameters[key];
-  Widget build(BuildContext context) {
+  flutter.Route<dynamic> build() {
     assert(isMatch);
-    assert(context != null);
 
-    return builder(context, this);
+    return builder(this);
   }
 
   @override

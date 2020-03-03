@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart' hide Route;
+import 'package:flutter/widgets.dart' as flutter show Route;
 import 'package:meta/meta.dart';
 
 import 'route.dart';
@@ -9,8 +11,19 @@ class Router {
 
   final List<Route> routes;
 
-  RouteResult evaluate(Uri uri) {
-    final rootResult = RouteResult.root(uri);
+  flutter.Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    final result = evaluate(settings);
+    if (!result.isMatch) {
+      return null;
+    }
+
+    return result.build();
+  }
+
+  RouteResult evaluate(RouteSettings settings) {
+    assert(settings.name != null);
+    final rootResult = RouteResult.root(settings);
+
     for (final route in routes) {
       final result = route.evaluate(rootResult);
       if (result.isMatch) {

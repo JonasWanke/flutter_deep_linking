@@ -1,92 +1,54 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_deep_linking/flutter_deep_linking.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart' as flutter show Route;
 import 'package:meta/meta.dart';
 
-import 'partial_uri.dart';
+import 'matchers.dart';
 import 'route_result.dart';
-import 'route_selectors.dart';
 
-typedef RouteBuilder = Widget Function(
-    BuildContext context, RouteResult result);
+typedef RouteBuilder = flutter.Route<dynamic> Function(RouteResult result);
+typedef MaterialPageRouteBuilder = Widget Function(
+    RouteResult result, BuildContext context);
 
 @immutable
 class Route {
-  const Route._(this.selector, this.builder, this.routes)
-      : assert(selector != null),
+  Route({
+    Matcher matcher,
+    RouteBuilder builder,
+    MaterialPageRouteBuilder materialPageRouteBuilder,
+    List<Route> routes = const [],
+  }) : this._(matcher, builder, materialPageRouteBuilder, routes);
+
+  Route._(
+    this.matcher,
+    RouteBuilder builder,
+    MaterialPageRouteBuilder materialPageRouteBuilder,
+    this.routes,
+  )   : assert(matcher != null),
+        assert(
+            [builder, materialPageRouteBuilder]
+                    .where((b) => b != null)
+                    .length <=
+                1,
+            'At most one builder may be provided'),
+        builder = builder ??
+            ((result) => MaterialPageRoute(
+                builder: (context) => materialPageRouteBuilder(result, context),
+                settings: result.settings)),
         assert(routes != null);
 
-  Route.scheme(
-    String scheme, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(SchemeRouteSelector([scheme]), builder, routes);
-  Route.schemes(
-    List<String> schemes, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(SchemeRouteSelector(schemes), builder, routes);
-
-  Route.host(
-    String host, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(HostRouteSelector([host]), builder, routes);
-  Route.hosts(
-    List<String> hosts, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(HostRouteSelector(hosts), builder, routes);
-
-  factory Route.webHost(
-    String host, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) {
-    return Route.schemes(
-      ['http', 'https'],
-      routes: [
-        Route.host(host, builder: builder, routes: routes),
-      ],
-    );
-  }
-  factory Route.webHosts(
-    List<String> hosts, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) {
-    return Route.schemes(
-      ['http', 'https'],
-      routes: [
-        Route.hosts(hosts, builder: builder, routes: routes),
-      ],
-    );
-  }
-
-  Route.path(
-    String path, {
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(PathRouteSelector(path), builder, routes);
-
-  Route.any({
-    RouteBuilder builder,
-    List<Route> routes = const [],
-  }) : this._(AnyRouteSelector(), builder, routes);
-
-  final RouteSelector selector;
+  final Matcher matcher;
   final RouteBuilder builder;
   final List<Route> routes;
 
   RouteResult evaluate(RouteResult parentResult) {
-    final evaluation = selector.evaluate(parentResult.remainingUri);
+    final evaluation = matcher.evaluate(parentResult.remainingUri);
     if (!evaluation.isMatch) {
       return parentResult.withNoNestedMatch();
     }
 
     final result = parentResult.withNestedMatch(
       evaluation,
-      (_, __) {
+      (_) {
         assert(false, 'This result is temporary and should not be returned');
         return null;
       },
