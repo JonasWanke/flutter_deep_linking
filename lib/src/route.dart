@@ -12,18 +12,11 @@ typedef MaterialPageRouteBuilder = Widget Function(
 @immutable
 class Route {
   Route({
-    Matcher matcher,
+    this.matcher = const Matcher.any(),
     RouteBuilder builder,
     MaterialPageRouteBuilder materialPageRouteBuilder,
-    List<Route> routes = const [],
-  }) : this._(matcher, builder, materialPageRouteBuilder, routes);
-
-  Route._(
-    this.matcher,
-    RouteBuilder builder,
-    MaterialPageRouteBuilder materialPageRouteBuilder,
-    this.routes,
-  )   : assert(matcher != null),
+    this.routes = const [],
+  })  : assert(matcher != null),
         assert(
             [builder, materialPageRouteBuilder]
                     .where((b) => b != null)
