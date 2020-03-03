@@ -29,7 +29,6 @@ class RouteResult {
 
   RouteResult.root(this.settings)
       : assert(settings != null),
-        assert(uri != null),
         isMatch = true,
         remainingUri = PartialUri.parse(settings.name),
         parameters = {},

@@ -132,7 +132,7 @@ class SchemeMatcher extends Matcher {
     }
 
     final match = scheme.matchAsPrefix(uri.scheme);
-    if (match.end != uri.scheme.length) {
+    if (match == null || match.end != uri.scheme.length) {
       return MatcherEvaluation.noMatcher();
     }
 
@@ -162,7 +162,7 @@ class HostMatcher extends Matcher {
     }
 
     final match = host.matchAsPrefix(uri.host);
-    if (match.end != uri.host.length) {
+    if (match == null || match.end != uri.host.length) {
       return MatcherEvaluation.noMatcher();
     }
 
