@@ -34,7 +34,7 @@ final router = Router(
               matcher: Matcher.path('{courseId}'),
               materialBuilder: (_, RouteResult result) {
                 // You can access the matched parameters using `result[<name>]`.
-                return CourseDetailPage(result['assignmentId']);
+                return CourseDetailPage(result['courseId']);
               },
             ),
           ],
