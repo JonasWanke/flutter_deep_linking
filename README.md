@@ -63,7 +63,7 @@ To build the actual page, you can specify either of:
 - [`Route.materialBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
 
 
-### 3. Let your [`Router`] take care of resolving URIs in `MaterialApp` (or `CupertinoApp` or a custom `Navigator`):
+### 3. 🎯 Let your [`Router`] take care of resolving URIs in `MaterialApp` (or `CupertinoApp` or a custom `Navigator`):
 
 ```dart
 MaterialApp(
@@ -73,7 +73,7 @@ MaterialApp(
 ```
 
 
-### 4. Use your new routes!
+### 4. 🚀 Use your new routes!
 
 When navigating, use `navigator.pushNamed(uriString)` instead of calling `navigator.push(builder)` and benefit from loose coupling!
 
@@ -86,7 +86,7 @@ And if you build an app in addition to a website, you can use a package like [un
 
 Available [`Matcher`]s:
 - `Matcher.scheme`: Matches a URI scheme like `https`.
-- `Matcher.webScheme`: Conveniently matches `http` or `httos`.
+- `Matcher.webScheme`: Conveniently matches `http` or `https`.
 - `Matcher.host`: Matches a URI host like `schul-cloud.org`.
 - `Matcher.webHost`: Conveniently matches a `webScheme` (see above) and a URI host.
 - `Matcher.path`: Matches a single or multiple URI path segments like `courses/{courseId}`, whereas `courseId` is a placeholder and will match exactly one segment.
