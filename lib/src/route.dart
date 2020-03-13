@@ -23,10 +23,16 @@ class Route {
                     .length <=
                 1,
             'At most one builder may be provided'),
-        builder = builder ??
-            ((result) => MaterialPageRoute(
-                builder: (context) => materialPageRouteBuilder(context, result),
-                settings: result.settings)),
+        builder = {
+          builder: builder,
+          materialPageRouteBuilder: (result) => MaterialPageRoute(
+              builder: (context) => materialPageRouteBuilder(context, result),
+              settings: result.settings),
+        }
+            .entries
+            .firstWhere((e) => e.key != null,
+                orElse: () => MapEntry(null, null))
+            .value,
         assert(routes != null);
 
   final Matcher matcher;
