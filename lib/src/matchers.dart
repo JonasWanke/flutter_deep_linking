@@ -220,7 +220,7 @@ class PathMatcher extends Matcher {
   }
 
   @override
-  String toString() => 'Path: ${pathSegments.join('/')}';
+  String toString() => 'path(${pathSegments.join('/')})';
 }
 
 class AnyMatcher extends Matcher {
