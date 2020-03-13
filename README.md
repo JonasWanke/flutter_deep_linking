@@ -58,7 +58,7 @@ final router = Router(
 
 [`Router`] accepts a list of [`Route`]s which are searched top to bottom, depth first. Using [`Matcher`]s you can match parts of the URI. Inner [`Matcher`]s can't access parts of the URI that have already been matched by an outer [`Matcher`].
 
-To build the actual page, you can either specify either of:
+To build the actual page, you can specify either of:
 - [`Route.builder`]: Takes a [`RouteResult`] and returns an instance of Flutter's [`Route`][widgets.Route].
 - [`Route.materialBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
 
