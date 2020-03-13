@@ -10,18 +10,18 @@ void main() {
       routes: [
         Route(
           matcher: Matcher.path('JonasWanke'),
-          materialPageRouteBuilder: (_, __) => Text('User: JonasWanke'),
+          materialBuilder: (_, __) => Text('User: JonasWanke'),
           routes: [
             Route(
               matcher: Matcher.path('{repoName}'),
-              materialPageRouteBuilder: (_, result) =>
+              materialBuilder: (_, result) =>
                   Text('Repository: ${result['repoName']}'),
             ),
           ],
         ),
         Route(
           matcher: Matcher.any(),
-          materialPageRouteBuilder: (_, __) => Text('Not found'),
+          materialBuilder: (_, __) => Text('Not found'),
         )
       ],
     );

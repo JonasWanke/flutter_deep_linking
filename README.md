@@ -25,14 +25,14 @@ final router = Router(
       routes: [
         Route(
           matcher: Matcher.path('courses'),
-          materialPageRouteBuilder: (_, __) => CoursesPage(),
+          materialBuilder: (_, __) => CoursesPage(),
           routes: [
             // If this route matches, it is used. Otherwise, we fall back to the
             // outer courses-route.
             Route(
               // {courseId} is a parameter matches a single path segment.
               matcher: Matcher.path('{courseId}'),
-              materialPageRouteBuilder: (_, RouteResult result) {
+              materialBuilder: (_, RouteResult result) {
                 // You can access the matched parameters using `result[<name>]`.
                 return CourseDetailPage(result['assignmentId']);
               },
@@ -42,13 +42,13 @@ final router = Router(
         Route(
           // Matcher.path can also match nested paths.
           matcher: Matcher.path('user/settings'),
-          materialPageRouteBuilder: (_, __) => SettingsPage(),
+          materialBuilder: (_, __) => SettingsPage(),
         ),
       ],
     ),
     // This route doesn't specify a matcher and hence matches any route.
     Route(
-      materialPageRouteBuilder: (_, RouteResult result) => NotFoundPage(result.uri),
+      materialBuilder: (_, RouteResult result) => NotFoundPage(result.uri),
     ),
   ],
 );
@@ -60,7 +60,7 @@ final router = Router(
 
 To build the actual page, you can either specify either of:
 - [`Route.builder`]: Takes a [`RouteResult`] and returns an instance of Flutter's [`Route`][widgets.Route].
-- [`Route.materialPageRouteBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
+- [`Route.materialBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
 
 
 ### 3. Let your [`Router`] take care of resolving URIs in `MaterialApp` (or `CupertinoApp` or a custom `Navigator`):
@@ -112,6 +112,6 @@ You can also combine [`Matcher`]s within a single [`Route`]:
 [`Matcher`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Matcher-class.html
 [`Route`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Route-class.html
 [`Route.builder`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Route/builder.html
-[`Route.builder`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Route/materialPageRouteBuilder.html
+[`Route.materialBuilder`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Route/materialBuilder.html
 [`RouteResult`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/RouteResult-class.html
 [`Router`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Router-class.html

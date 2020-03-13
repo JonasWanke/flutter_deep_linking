@@ -6,7 +6,7 @@ import 'matchers.dart';
 import 'route_result.dart';
 
 typedef RouteBuilder = flutter.Route<dynamic> Function(RouteResult result);
-typedef MaterialPageRouteBuilder = Widget Function(
+typedef materialBuilder = Widget Function(
     BuildContext context, RouteResult result);
 
 @immutable
@@ -14,19 +14,15 @@ class Route {
   Route({
     this.matcher = const Matcher.any(),
     RouteBuilder builder,
-    MaterialPageRouteBuilder materialPageRouteBuilder,
+    materialBuilder materialBuilder,
     this.routes = const [],
   })  : assert(matcher != null),
-        assert(
-            [builder, materialPageRouteBuilder]
-                    .where((b) => b != null)
-                    .length <=
-                1,
+        assert([builder, materialBuilder].where((b) => b != null).length <= 1,
             'At most one builder may be provided'),
         builder = {
           builder: builder,
-          materialPageRouteBuilder: (result) => MaterialPageRoute(
-              builder: (context) => materialPageRouteBuilder(context, result),
+          materialBuilder: (result) => MaterialPageRoute(
+              builder: (context) => materialBuilder(context, result),
               settings: result.settings),
         }
             .entries
