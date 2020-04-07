@@ -1,17 +1,40 @@
 🧭 Handle all your routing with proper deep links and handle them declaratively!
 
+### What this package is about
 
-## Getting started
+This package takes declaratively defined [`Route`]s and receives a URI during navigation, evaluates those and then returns a [`PageRoute`] for the correct page. This means, you can now benefit from loose coupling and navigate using:
 
-### 1. 📦 Add this package to your dependencies:
+```dart
+Navigator.of(context).pushNamed('/articles/$id')
+```
 
-```yaml
-dependencies:
-  flutter_deep_linking: ^0.1.0
+instead of hardcoding the corresponding widget everytime:
+
+```dart
+Navigator.of(context)
+  .push(MaterialPageRoute(builder: (_) => ArticlePage(id)));
 ```
 
 
-### 2. 🧭 Create a [`Router`] containing all your routes:
+### What this package is not about
+
+This package doesn't catch incoming deep links from other apps. For this, I recommend [<kbd>uni_links</kbd>](https://pub.dev/packages/uni_links).
+
+You can, however, combine both packages. Just forward any received deep links to your `Navigator` and `flutter_deep_linking` takes care of resolving them. This also works with the initial deep link:
+
+```dart
+String initialLink = await getInitialLink(); // from uni_links
+return MaterialApp(
+  initialRoute: initialLink,
+  onGenerateRoute: router.onGenerateRoute,   // from flutter_deep_linking
+  // ...
+);
+```
+
+
+## Getting started
+
+### 1. 🧭 Create a [`Router`] containing all your routes:
 
 ```dart
 final router = Router(
@@ -63,7 +86,7 @@ To build the actual page, you can specify either of:
 - [`Route.materialBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
 
 
-### 3. 🎯 Let your [`Router`] take care of resolving URIs in `MaterialApp` (or `CupertinoApp` or a custom `Navigator`):
+### 2. 🎯 Let your [`Router`] take care of resolving URIs in `MaterialApp` (or `CupertinoApp` or a custom `Navigator`):
 
 ```dart
 MaterialApp(
@@ -73,7 +96,7 @@ MaterialApp(
 ```
 
 
-### 4. 🚀 Use your new routes!
+### 3. 🚀 Use your new routes!
 
 When navigating, use `navigator.pushNamed(uriString)` instead of calling `navigator.push(builder)` and benefit from loose coupling!
 
@@ -107,6 +130,7 @@ You can also combine [`Matcher`]s within a single [`Route`]:
 [uni_links]: https://pub.dev/packages/uni_links
 <!-- Flutter -->
 [`MaterialPageRoute`]: https://api.flutter.dev/flutter/material/MaterialPageRoute-class.html
+[`PageRoute`]: https://api.flutter.dev/flutter/widgets/PageRoute-class.html
 [widgets.Route]: https://api.flutter.dev/flutter/widgets/Route-class.html
 <!-- flutter_deep_linking -->
 [`Matcher`]: https://pub.dev/documentation/flutter_deep_linking/latest/flutter_deep_linking/Matcher-class.html
