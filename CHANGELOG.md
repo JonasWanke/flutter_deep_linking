@@ -13,8 +13,16 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### 📦 Build & CI
 -->
 
-## [Unreleased](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.0...dev)
+## [Unreleased](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.1...master)
+
+
+## [0.1.1](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.0...v0.1.1) - 2020-04-07
+
+### 📜 Documentation updates
+
+- explain the scope of this package in the README
 
 
 ## 0.1.0 - 2020-03-13
+
 Initial release 🎉
