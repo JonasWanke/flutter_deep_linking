@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' hide Route;
+import 'package:flutter/widgets.dart' hide Route, RouteBuilder;
 import 'package:flutter/widgets.dart' as flutter show Route;
 
 import 'matchers.dart';

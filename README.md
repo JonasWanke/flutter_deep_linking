@@ -77,7 +77,7 @@ final router = Router(
 );
 ```
 
-> **Note:** Flutter also defines a class called `Route` which can lead to some confusion. If you import `package:flutter/widgets.dart` in the same file as `flutter_deep_linking`, you can ignore Flutter's `Route` with `import 'package:flutter/widgets.dart' hide Route;`.
+> **Note:** Flutter also defines classes called `Route` & `RouteBuilder` which can lead to some confusion. If you import `package:flutter/widgets.dart` in the same file as `flutter_deep_linking`, you can ignore Flutter's `Route` & `RouteBuilder` with `import 'package:flutter/widgets.dart' hide Route, RouteBuilder;`.
 
 [`Router`] accepts a list of [`Route`]s which are searched top to bottom, depth first. Using [`Matcher`]s you can match parts of the URI. Inner [`Matcher`]s can't access parts of the URI that have already been matched by an outer [`Matcher`].
 
