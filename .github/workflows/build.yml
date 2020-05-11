@@ -52,6 +52,9 @@ jobs:
           name: source
           path: .
 
+      - name: Install dependencies
+        run: flutter pub get
+
       - name: Run tests
         run: flutter test
 
