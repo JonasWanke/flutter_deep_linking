@@ -82,6 +82,7 @@ final router = Router(
 [`Router`] accepts a list of [`Route`]s which are searched top to bottom, depth first. Using [`Matcher`]s you can match parts of the URI. Inner [`Matcher`]s can't access parts of the URI that have already been matched by an outer [`Matcher`].
 
 To build the actual page, you can specify either of:
+
 - [`Route.builder`]: Takes a [`RouteResult`] and returns an instance of Flutter's [`Route`][widgets.Route].
 - [`Route.materialBuilder`] (Convenience property): Takes a [`BuildContext`] and a [`RouteResult`] and returns a widget, which is then wrapped in [`MaterialPageRoute`].
 
@@ -108,6 +109,7 @@ And if you build an app in addition to a website, you can use a package like [un
 ### [`Matcher`]s
 
 Available [`Matcher`]s:
+
 - `Matcher.scheme`: Matches a URI scheme like `https`.
 - `Matcher.webScheme`: Conveniently matches `http` or `https`.
 - `Matcher.host`: Matches a URI host like `schul-cloud.org`.
@@ -115,6 +117,7 @@ Available [`Matcher`]s:
 - `Matcher.path`: Matches a single or multiple URI path segments like `courses/{courseId}`, whereas `courseId` is a placeholder and will match exactly one segment.
 
 You can also combine [`Matcher`]s within a single [`Route`]:
+
 - `matcher1 & matcher2` matches both [`Matcher`]s in sequence.
 - `matcher1 | matcher2` evaluates both [`Matcher`]s in sequence and returns the first match.
 
@@ -122,7 +125,8 @@ You can also combine [`Matcher`]s within a single [`Route`]:
 ### [`RouteResult`]
 
 [`RouteResult`] most importantly contains:
-- `uri`: The initial URI (which can be used e.g. to access query parameters).
+
+- `uri`: The initial URI (which can be used, e.g., to access query parameters).
 - `parameters`: A `Map<String, String>` of matched parameters, also accessible via `result[<name>]`.
 - `settings`: The `RouteSettings` that should be forwarded to the generated (Flutter) `Route`.
 
