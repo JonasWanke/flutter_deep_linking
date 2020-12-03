@@ -50,7 +50,7 @@ class SequenceMatcher extends Matcher {
       }
 
       evaluation = MatcherEvaluation.match(
-        remainingUri: evaluation.remainingUri,
+        remainingUri: evaluation.remainingUri!,
         parameters: {...evaluation.parameters, ...newEvaluation.parameters},
       );
     }
@@ -88,14 +88,14 @@ class MatcherEvaluation {
         remainingUri = null,
         parameters = const {};
   const MatcherEvaluation.match({
-    @required this.remainingUri,
+    required PartialUri this.remainingUri,
     this.parameters = const {},
   })  : isMatch = true,
         assert(remainingUri != null),
         assert(parameters != null);
 
   final bool isMatch;
-  final PartialUri remainingUri;
+  final PartialUri? remainingUri;
   final Map<String, String> parameters;
 
   @override

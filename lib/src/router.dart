@@ -7,11 +7,11 @@ import 'route_result.dart';
 
 @immutable
 class Router {
-  const Router({@required this.routes}) : assert(routes != null);
+  const Router({required this.routes});
 
   final List<Route> routes;
 
-  flutter.Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  flutter.Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final result = evaluate(settings);
     if (!result.isMatch) {
       return null;

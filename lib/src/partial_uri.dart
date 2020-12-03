@@ -11,11 +11,7 @@ class PartialUri {
     this.pathSegments = const [],
     this.queryParameters = const {},
     this.fragment = '',
-  })  : assert(scheme != null),
-        assert(host != null),
-        assert(pathSegments != null),
-        assert(queryParameters != null),
-        assert(fragment != null);
+  });
 
   PartialUri.fromUri(Uri uri)
       : this(

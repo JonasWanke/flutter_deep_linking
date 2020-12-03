@@ -10,27 +10,23 @@ import 'utils.dart';
 @immutable
 class RouteResult {
   const RouteResult.noMatch(this.settings)
-      : assert(settings != null),
-        isMatch = false,
+      : isMatch = false,
         remainingUri = null,
         parameters = const {},
         builder = null;
 
   const RouteResult.match(
     this.settings, {
-    @required this.remainingUri,
+    required PartialUri this.remainingUri,
     this.parameters = const {},
-    @required this.builder,
-  })  : assert(settings != null),
-        isMatch = true,
-        assert(remainingUri != null),
-        assert(parameters != null),
-        assert(builder != null);
+    required RouteBuilder builder,
+  })   : isMatch = true,
+        // ignore: prefer_initializing_formals
+        builder = builder;
 
   RouteResult.root(this.settings)
-      : assert(settings != null),
-        isMatch = true,
-        remainingUri = PartialUri.parse(settings.name),
+      : isMatch = true,
+        remainingUri = PartialUri.parse(settings.name!),
         parameters = {},
         builder = null;
 
@@ -39,50 +35,44 @@ class RouteResult {
   final RouteSettings settings;
 
   /// The original [Uri] that was requested.
-  Uri get uri => Uri.parse(settings.name);
+  Uri get uri => Uri.parse(settings.name!);
 
   /// `true` if the [uri] was matched, `false` otherwise.
   final bool isMatch;
 
   /// Parts of the original [uri] that are left after matching.
-  final PartialUri remainingUri;
+  final PartialUri? remainingUri;
 
   /// Parameters, e.g. from path segments.
   final Map<String, String> parameters;
 
   /// The [RouteBuilder] to construct a [flutter.Route] for this match.
-  final RouteBuilder builder;
+  final RouteBuilder? builder;
 
   RouteResult withNestedMatch(
     MatcherEvaluation evaluation,
     RouteBuilder builder,
   ) {
-    assert(evaluation != null);
-    assert(builder != null);
-
     return RouteResult.match(
       settings,
       builder: builder,
-      remainingUri: evaluation.remainingUri,
+      remainingUri: evaluation.remainingUri!,
       parameters: {...parameters, ...evaluation.parameters},
     );
   }
 
   RouteResult withNoNestedMatch() => RouteResult.noMatch(settings);
 
-  String operator [](String key) => parameters[key];
+  String? operator [](String key) => parameters[key];
   flutter.Route<dynamic> build() {
     assert(isMatch);
 
-    return builder(this);
+    return builder!(this);
   }
 
   @override
   String toString() {
-    if (!isMatch) {
-      return 'no match';
-    }
-
+    if (!isMatch) return 'no match';
     return 'match: $parameters, remaining: $remainingUri';
   }
 

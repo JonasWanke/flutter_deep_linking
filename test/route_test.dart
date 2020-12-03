@@ -74,7 +74,11 @@ void main() {
 
 String _extractText(flutter.Route<dynamic> route) {
   final materialPageRoute = route as MaterialPageRoute;
-  final semantics = materialPageRoute.buildPage(null, null, null) as Semantics;
-  final text = semantics.child as Text;
-  return text.data;
+  final text = materialPageRoute.buildContent(MockBuildContext()) as Text;
+  return text.data!;
+}
+
+class MockBuildContext implements BuildContext {
+  @override
+  dynamic noSuchMethod(Invocation invocation) {}
 }

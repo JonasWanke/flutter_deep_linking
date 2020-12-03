@@ -6,59 +6,52 @@ import 'matchers.dart';
 import 'route_result.dart';
 
 typedef RouteBuilder = flutter.Route<dynamic> Function(RouteResult result);
-typedef materialBuilder = Widget Function(
-    BuildContext context, RouteResult result);
+typedef MaterialBuilder = Widget Function(
+  BuildContext context,
+  RouteResult result,
+);
 
 @immutable
 class Route {
   Route({
     this.matcher = const Matcher.any(),
-    RouteBuilder builder,
-    materialBuilder materialBuilder,
+    RouteBuilder? builder,
+    MaterialBuilder? materialBuilder,
     this.routes = const [],
-  })  : assert(matcher != null),
-        assert([builder, materialBuilder].where((b) => b != null).length <= 1,
+  })  : assert([builder, materialBuilder].where((b) => b != null).length <= 1,
             'At most one builder may be provided'),
-        builder = {
-          builder: builder,
-          materialBuilder: (result) => MaterialPageRoute(
-              builder: (context) => materialBuilder(context, result),
-              settings: result.settings),
-        }
-            .entries
-            .firstWhere((e) => e.key != null,
-                orElse: () => MapEntry(null, null))
-            .value,
-        assert(routes != null);
+        builder = <RouteBuilder?>[
+          builder,
+          if (materialBuilder != null)
+            (result) {
+              return MaterialPageRoute<dynamic>(
+                builder: (context) => materialBuilder(context, result),
+                settings: result.settings,
+              );
+            }
+        ].firstWhere((e) => e != null, orElse: () => null);
 
   final Matcher matcher;
-  final RouteBuilder builder;
+  final RouteBuilder? builder;
   final List<Route> routes;
 
   RouteResult evaluate(RouteResult parentResult) {
-    final evaluation = matcher.evaluate(parentResult.remainingUri);
-    if (!evaluation.isMatch) {
-      return parentResult.withNoNestedMatch();
-    }
+    final evaluation = matcher.evaluate(parentResult.remainingUri!);
+    if (!evaluation.isMatch) return parentResult.withNoNestedMatch();
 
     final result = parentResult.withNestedMatch(
       evaluation,
       (_) {
-        assert(false, 'This result is temporary and should not be returned');
-        return null;
+        throw StateError('This result is temporary and should not be returned');
       },
     );
 
     for (final route in routes) {
       final childResult = route.evaluate(result);
-      if (childResult.isMatch) {
-        return childResult;
-      }
+      if (childResult.isMatch) return childResult;
     }
 
-    if (builder == null) {
-      return parentResult.withNoNestedMatch();
-    }
-    return parentResult.withNestedMatch(evaluation, builder);
+    if (builder == null) return parentResult.withNoNestedMatch();
+    return parentResult.withNestedMatch(evaluation, builder!);
   }
 }

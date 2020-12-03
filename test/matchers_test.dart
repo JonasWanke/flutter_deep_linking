@@ -2,7 +2,7 @@ import 'package:flutter_deep_linking/flutter_deep_linking.dart';
 import 'package:test/test.dart' hide Matcher;
 
 void main() {
-  Matcher matcher;
+  late Matcher matcher;
 
   group('scheme', () {
     final urisWithoutScheme = [
