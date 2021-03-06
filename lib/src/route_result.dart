@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart' hide Route, RouteBuilder;
+import 'package:flutter/widgets.dart' hide Route;
 import 'package:flutter/widgets.dart' as flutter show Route;
 
 import 'matchers.dart';
 import 'partial_uri.dart';
 import 'route.dart';
-import 'utils.dart';
 
 @immutable
 class RouteResult {
@@ -86,5 +85,5 @@ class RouteResult {
   }
 
   @override
-  int get hashCode => hashList([isMatch, remainingUri, parameters]);
+  int get hashCode => hashValues(isMatch, remainingUri, parameters);
 }

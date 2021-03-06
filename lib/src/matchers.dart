@@ -1,8 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 import 'partial_uri.dart';
-import 'utils.dart';
 
 @immutable
 abstract class Matcher {
@@ -34,9 +35,7 @@ abstract class Matcher {
 }
 
 class SequenceMatcher extends Matcher {
-  SequenceMatcher(this.selectors)
-      : assert(selectors != null),
-        assert(selectors.every((s) => s != null));
+  const SequenceMatcher(this.selectors);
 
   final List<Matcher> selectors;
 
@@ -63,9 +62,7 @@ class SequenceMatcher extends Matcher {
 }
 
 class ChoiceMatcher extends Matcher {
-  ChoiceMatcher(this.selectors)
-      : assert(selectors != null),
-        assert(selectors.every((s) => s != null));
+  const ChoiceMatcher(this.selectors);
 
   final List<Matcher> selectors;
 
@@ -90,9 +87,7 @@ class MatcherEvaluation {
   const MatcherEvaluation.match({
     required PartialUri this.remainingUri,
     this.parameters = const {},
-  })  : isMatch = true,
-        assert(remainingUri != null),
-        assert(parameters != null);
+  }) : isMatch = true;
 
   final bool isMatch;
   final PartialUri? remainingUri;
@@ -114,7 +109,7 @@ class MatcherEvaluation {
       remainingUri == other.remainingUri &&
       mapEquals(parameters, other.parameters);
   @override
-  int get hashCode => hashList([isMatch, remainingUri, parameters]);
+  int get hashCode => hashValues(isMatch, remainingUri, parameters);
 }
 
 // TODO(JonasWanke): optional selectors
@@ -123,8 +118,7 @@ class SchemeMatcher extends Matcher {
   const SchemeMatcher(
     this.scheme, {
     this.isOptional = false,
-  })  : assert(scheme != null),
-        assert(isOptional != null);
+  });
 
   final bool isOptional;
   final Pattern scheme;
@@ -153,8 +147,7 @@ class HostMatcher extends Matcher {
   const HostMatcher(
     this.host, {
     this.isOptional = false,
-  })  : assert(host != null),
-        assert(isOptional != null);
+  });
 
   final bool isOptional;
   final Pattern host;
@@ -181,8 +174,7 @@ class HostMatcher extends Matcher {
 
 class PathMatcher extends Matcher {
   PathMatcher(String path)
-      : assert(path != null),
-        assert(path.isNotEmpty),
+      : assert(path.isNotEmpty),
         pathSegments = path.split('/');
 
   final List<String> pathSegments;

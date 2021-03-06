@@ -1,7 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-
-import 'utils.dart';
 
 @immutable
 class PartialUri {
@@ -67,5 +67,5 @@ class PartialUri {
 
   @override
   int get hashCode =>
-      hashList([scheme, host, pathSegments, queryParameters, fragment]);
+      hashValues(scheme, host, pathSegments, queryParameters, fragment);
 }
