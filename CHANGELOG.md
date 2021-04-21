@@ -3,7 +3,7 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- Template:
-## [NEW](https://github.com/JonasWanke/flutter_deep_linking/compare/vOLD...vNEW) - 2020-xx-xx
+## NEW · 2021-xx-xx
 ### ⚠ BREAKING CHANGES
 ### 🎉 New Features
 ### ⚡ Changes
@@ -13,16 +13,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### 📦 Build & CI
 -->
 
-## [Unreleased](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.2.0...master)
-
-
-## [0.2.0](https://github.com/JonasWanke/flutter_deep_linking/compare/0.2.0-nullsafety.0...v0.2.0) - 2021-03-06
+## 0.2.0 · 2021-03-06
 
 ### 🏗 Refactoring
 - minor clean-up
 
 
-## [0.2.0-nullsafety.0](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.2...v0.2.0-nullsafety.0) - 2020-12-03
+## 0.2.0-nullsafety.0 · 2020-12-03
 
 ### ⚠ BREAKING CHANGES
 - renamed typedef `materialBuilder` to `MaterialBuilder`
@@ -31,18 +28,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - support null safety
 
 
-## [0.1.2](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.1...v0.1.2) - 2020-05-11
+## 0.1.2 · 2020-05-11
 
 ### 🐛 Bug Fixes
 - support Flutter v1.17.0
 
 
-## [0.1.1](https://github.com/JonasWanke/flutter_deep_linking/compare/v0.1.0...v0.1.1) - 2020-04-07
+## 0.1.1 · 2020-04-07
 
 ### 📜 Documentation updates
 - explain the scope of this package in the README
 
 
-## 0.1.0 - 2020-03-13
+## 0.1.0 · 2020-03-13
 
 Initial release 🎉
