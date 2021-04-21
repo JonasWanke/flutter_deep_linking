@@ -13,6 +13,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### 📦 Build & CI
 -->
 
+## 0.2.1 · 2021-04-21
+
+### 🎉 New Features
+- add `route.cupertinoBuilder`
+
+
 ## 0.2.0 · 2021-03-06
 
 ### 🏗 Refactoring
@@ -22,7 +28,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## 0.2.0-nullsafety.0 · 2020-12-03
 
 ### ⚠ BREAKING CHANGES
-- renamed typedef `materialBuilder` to `MaterialBuilder`
+- rename typedef `materialBuilder` to `MaterialBuilder`
 
 ### 🎉 New Features
 - support null safety
