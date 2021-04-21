@@ -1,12 +1,17 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as flutter show Route;
-import 'package:meta/meta.dart';
 
 import 'matchers.dart';
 import 'route_result.dart';
 
 typedef RouteBuilder = flutter.Route<dynamic> Function(RouteResult result);
 typedef MaterialBuilder = Widget Function(
+  BuildContext context,
+  RouteResult result,
+);
+typedef CupertinoBuilder = Widget Function(
   BuildContext context,
   RouteResult result,
 );
@@ -17,9 +22,13 @@ class Route {
     this.matcher = const Matcher.any(),
     RouteBuilder? builder,
     MaterialBuilder? materialBuilder,
+    CupertinoBuilder? cupertinoBuilder,
     this.routes = const [],
-  })  : assert([builder, materialBuilder].where((b) => b != null).length <= 1,
-            'At most one builder may be provided'),
+  })  : assert(
+          [builder, materialBuilder, cupertinoBuilder].whereNotNull().length <=
+              1,
+          'At most one builder may be provided',
+        ),
         builder = <RouteBuilder?>[
           builder,
           if (materialBuilder != null)
@@ -28,8 +37,15 @@ class Route {
                 builder: (context) => materialBuilder(context, result),
                 settings: result.settings,
               );
-            }
-        ].firstWhere((e) => e != null, orElse: () => null);
+            },
+          if (cupertinoBuilder != null)
+            (result) {
+              return CupertinoPageRoute<dynamic>(
+                builder: (context) => cupertinoBuilder(context, result),
+                settings: result.settings,
+              );
+            },
+        ].whereNotNull().firstOrNull;
 
   final Matcher matcher;
   final RouteBuilder? builder;
