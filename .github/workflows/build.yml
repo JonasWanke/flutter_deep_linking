@@ -51,7 +51,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
 
       - name: Checkout source
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: source
           path: .
@@ -77,7 +77,7 @@ jobs:
           channel: ${{ env.FLUTTER_CHANNEL }}
 
       - name: Checkout source
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: source
           path: .
